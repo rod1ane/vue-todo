@@ -1,13 +1,25 @@
+import normalize from 'normalize.css'
+
+
 import Vue from 'vue'
 import axios from 'axios'
-import VueAxios from 'vue-axios'
 import App from './App.vue'
+import store from './store'
+
+require('@/store/modules/subscriber')
 
 Vue.config.productionTip = false
 
-Vue.use(VueAxios, axios)
+Vue.use(normalize)
+
+axios.defaults.baseURL = 'https://wunder-1.herokuapp.com/';
 
 
-new Vue({
-  render: h => h(App),
-}).$mount('#app')
+store.dispatch('user/attempt', localStorage.getItem('token'))
+.then(() => {
+  new Vue({
+    store,
+    render: h => h(App),
+  }).$mount('#app')
+})
+
